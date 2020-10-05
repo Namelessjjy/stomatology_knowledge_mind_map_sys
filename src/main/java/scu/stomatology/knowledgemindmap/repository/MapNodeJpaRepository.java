@@ -1,0 +1,33 @@
+package scu.stomatology.knowledgemindmap.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Component;
+import scu.stomatology.knowledgemindmap.repository.entity.MapNodeMeta;
+
+import java.util.List;
+
+/**
+ *      
+ *  * @ProjectName:  knowledgemindmap
+ *  * @Package:    scu.stomatology.knowledgemindmap.repository 
+ *  * @ClassName:   UserJpaRepository 
+ *  * @Description:    
+ *  * @Author:    JiangJunYan 
+ *  * @CreateDate:  2020/9/28 18:38     
+ *  * @Version:    v1.0 
+ *  *    
+ *  
+ */
+@Component
+public interface MapNodeJpaRepository extends JpaRepository<MapNodeMeta, Long> {
+
+    List<MapNodeMeta> findByRootId(Long rootId);
+
+    @Query(value = "select * from map_node where content like ?1", nativeQuery = true)
+    List<MapNodeMeta> search(String toString);
+
+    MapNodeMeta findByContentAndRootId(String contnet, long l);
+
+    List<MapNodeMeta> findByParentId(Long parentId);
+}
