@@ -4,6 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import scu.stomatology.knowledgemindmap.repository.entity.User;
 
+import java.util.Date;
+
 /**
  *      
  *  * @ProjectName:  knowledgemindmap
@@ -20,7 +22,7 @@ public class TokenUtil {
 
     public static String getToken(User user) {
         String token = "";
-        token = JWT.create().withAudience(user.getUsername()).sign(Algorithm.HMAC256(user.getPassword()));
+        token = JWT.create().withExpiresAt(new Date(System.currentTimeMillis() + 10 * 1000)).withAudience(user.getUsername()).sign(Algorithm.HMAC256(user.getPassword()));
         return token;
     }
 

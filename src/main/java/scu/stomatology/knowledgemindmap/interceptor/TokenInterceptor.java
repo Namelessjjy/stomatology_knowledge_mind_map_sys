@@ -56,14 +56,14 @@ public class TokenInterceptor implements HandlerInterceptor {
             if (userLoginToken.required()) {
                 // 开始执行验证
                 if (token == null) {
-                    throw new RuntimeException("没有token，请重新登录");
+                    throw new RuntimeException("请登录");
                 }
                 // 获取token中username
                 String username;
                 try {
                     username = JWT.decode(token).getAudience().get(0);
                 } catch (JWTDecodeException e) {
-                    throw new RuntimeException("401");
+                    throw new RuntimeException("token失效，请重新登录");
                 }
                 User user = userRepository.findUserByUsername(username);
                 if (user == null) {
@@ -73,7 +73,7 @@ public class TokenInterceptor implements HandlerInterceptor {
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {
-                    throw new RuntimeException("401");
+                    throw new RuntimeException("请重新登录");
                 }
                 return true;
             }

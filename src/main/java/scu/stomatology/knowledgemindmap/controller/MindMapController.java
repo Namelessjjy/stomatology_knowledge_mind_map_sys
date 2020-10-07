@@ -2,6 +2,7 @@ package scu.stomatology.knowledgemindmap.controller;
 
 import org.springframework.web.bind.annotation.*;
 import scu.stomatology.knowledgemindmap.dto.GetMapRequest;
+import scu.stomatology.knowledgemindmap.dto.SavaMapReuquest;
 import scu.stomatology.knowledgemindmap.notation.PassToken;
 import scu.stomatology.knowledgemindmap.notation.UserLoginToken;
 import scu.stomatology.knowledgemindmap.service.service.MindMapService;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  *  *    
  *  
  */
+@CrossOrigin
 @ControllerAdvice
 @RestController
 @RequestMapping("/mindmap")
@@ -46,9 +48,9 @@ public class MindMapController {
 
     @UserLoginToken
     @PostMapping("/saveMindMap")
-    public Response saveMindMap(@RequestParam("rootId")Long rootId, HttpServletRequest request) {
+    public Response saveMindMap(@RequestBody SavaMapReuquest savaMapReuquest, HttpServletRequest request) {
         String token = request.getHeader("token");
-        return mindMapService.saveMindMap(rootId, token);
+        return mindMapService.saveMindMap(savaMapReuquest.getRootId(), token);
     }
 
     @UserLoginToken
@@ -64,6 +66,6 @@ public class MindMapController {
 
     @ExceptionHandler(value = RuntimeException.class)
     public Response notLoginExceptionHandler(RuntimeException e) {
-        return Response.valueOf(10001, e.getMessage());
+        return Response.valueOf(20000, "请重新登录");
     }
 }

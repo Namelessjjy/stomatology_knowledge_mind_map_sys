@@ -5,14 +5,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.jupiter.api.Test;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import scu.stomatology.knowledgemindmap.repository.MapNodeRepository;
 import scu.stomatology.knowledgemindmap.repository.MindMapRepository;
 import scu.stomatology.knowledgemindmap.repository.entity.MapNodeMeta;
 import scu.stomatology.knowledgemindmap.repository.entity.MindMap;
 import scu.stomatology.knowledgemindmap.service.service.MindMapService;
-import scu.stomatology.knowledgemindmap.vo.MapNode;
+
 import scu.stomatology.knowledgemindmap.vo.Temp;
 import scu.stomatology.knowledgemindmap.vo.TempJson;
 
@@ -25,119 +25,6 @@ import java.util.stream.Collectors;
 @SpringBootTest
 class KnowledgemindmapApplicationTests {
 
-    @Test
-    void contextLoads() {
-
-        String json = "{\n" +
-                "    \"id\": 1,\n" +
-                "    \"children\": [\n" +
-                "        {\n" +
-                "            \"id\": 2,\n" +
-                "            \"children\": [\n" +
-                "                {\n" +
-                "                    \"id\": 3,\n" +
-                "                    \"children\": [\n" +
-                "                        {\n" +
-                "                            \"id\": 5,\n" +
-                "                            \"children\": [\n" +
-                "                                {\n" +
-                "                                    \"id\": 13,\n" +
-                "                                    \"children\": [\n" +
-                "                                        {\n" +
-                "                                            \"id\": 21,\n" +
-                "                                            \"children\": []\n" +
-                "                                        },\n" +
-                "                                        {\n" +
-                "                                            \"id\": 22,\n" +
-                "                                            \"children\": []\n" +
-                "                                        }\n" +
-                "                                    ]\n" +
-                "                                },\n" +
-                "                                {\n" +
-                "                                    \"id\": 14,\n" +
-                "                                    \"children\": [\n" +
-                "                                        {\n" +
-                "                                            \"id\": 23,\n" +
-                "                                            \"children\": [\n" +
-                "                                                {\n" +
-                "                                                    \"id\": 24,\n" +
-                "                                                    \"children\": [\n" +
-                "                                                        {\n" +
-                "                                                            \"id\": 26,\n" +
-                "                                                            \"children\":[]\n" +
-                "                                                        }\n" +
-                "                                                    ]\n" +
-                "                                                },\n" +
-                "                                                {\n" +
-                "                                                    \"id\": 25,\n" +
-                "                                                    \"children\": [\n" +
-                "                                                        {\n" +
-                "                                                            \"id\": 27,\n" +
-                "                                                            \"children\": []\n" +
-                "                                                        }\n" +
-                "                                                    ]\n" +
-                "                                                }\n" +
-                "                                            ]\n" +
-                "                                        }\n" +
-                "                                    ]\n" +
-                "                                },\n" +
-                "                                {\n" +
-                "                                    \"id\": 15,\n" +
-                "                                    \"children\": [\n" +
-                "                                        {\n" +
-                "                                            \"id\": 28,\n" +
-                "                                            \"children\": [\n" +
-                "                                                {\n" +
-                "                                                    \"id\": 29,\n" +
-                "                                                    \"children\": [\n" +
-                "                                                        {\n" +
-                "                                                            \"id\": 31,\n" +
-                "                                                            \"children\": []\n" +
-                "                                                        }\n" +
-                "                                                    ]\n" +
-                "                                                },\n" +
-                "                                                {\n" +
-                "                                                    \"id\": 30,\n" +
-                "                                                    \"children\": [\n" +
-                "                                                        {\n" +
-                "                                                            \"id\": 32,\n" +
-                "                                                            \"children\": []\n" +
-                "                                                        }\n" +
-                "                                                    ]\n" +
-                "                                                }\n" +
-                "                                            ]\n" +
-                "                                        }\n" +
-                "                                    ]\n" +
-                "                                }\n" +
-                "                            ]\n" +
-                "                        },\n" +
-                "                        {\n" +
-                "                            \"id\": 6,\n" +
-                "                            \"children\": []\n" +
-                "                        },\n" +
-                "                        {\n" +
-                "                            \"id\": 7,\n" +
-                "                            \"children\": []\n" +
-                "                        },\n" +
-                "                        {\n" +
-                "                            \"id\": 8,\n" +
-                "                            \"children\": []\n" +
-                "                        }\n" +
-                "                    ]\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    \"id\": 4,\n" +
-                "                    \"children\": []\n" +
-                "                }\n" +
-                "            ]\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-        MapNode mapNode = JSON.parseObject(json, MapNode.class);
-        System.out.println();
-        String test = JSON.toJSONString(mapNode);
-        System.out.println(test);
-    }
 
     @Resource
     MindMapService mindMapService;
@@ -146,14 +33,14 @@ class KnowledgemindmapApplicationTests {
     @Resource
     MapNodeRepository mapNodeRepository;
 
-    @Test
+
     void test2() {
-        mindMapService.getMindMap("牙周组织病");
+        mindMapService.getMindMap("牙体");
     }
 
-    @Test
+
     void jsoupTest() throws IOException {
-        File file = new File("F://test2.html");
+        File file = new File("F://yati.html");
         Document doc = Jsoup.parse(file, "UTF-8", "");
         Elements elements = doc.getElementsByTag("g");
         Map<Long, List<Temp>> map = new HashMap<>();

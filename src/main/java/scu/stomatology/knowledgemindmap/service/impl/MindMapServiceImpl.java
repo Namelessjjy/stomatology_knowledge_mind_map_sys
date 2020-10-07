@@ -15,6 +15,7 @@ import scu.stomatology.knowledgemindmap.service.service.MindMapService;
 import scu.stomatology.knowledgemindmap.util.Response;
 import scu.stomatology.knowledgemindmap.util.ResponseStatusEnum;
 import scu.stomatology.knowledgemindmap.util.TokenUtil;
+import scu.stomatology.knowledgemindmap.util.Translator;
 import scu.stomatology.knowledgemindmap.vo.*;
 
 import javax.annotation.Resource;
@@ -46,10 +47,15 @@ public class MindMapServiceImpl implements MindMapService {
     private UserMindMapRepository userMindMapRepository;
     @Resource
     private UserRepository userRepository;
+    @Resource
+    private Translator translator;
 
     @Override
     public Response getMindMap(String mapName) {
-        MindMap mindMap = mindMapRepository.findMapByMapName(mapName);
+
+        Long rootId = translator.getTranslator().get(mapName);
+        MindMap mindMap = mindMapRepository.findMapByRootId(rootId);
+
         // 转换成对应的node节点(目前只有id)
         MapNode mapNode = JSON.parseObject(mindMap.getJsonStr(), MapNode.class);
         List<MapNodeMeta> metas = mapNodeRepository.findByRootId(mindMap.getRootId());
@@ -67,8 +73,8 @@ public class MindMapServiceImpl implements MindMapService {
             node.setRootId(mapNodeMeta.getRootId());
             node.setContent(mapNodeMeta.getContent());
         }
-
-        return Response.valueOf(ResponseStatusEnum.OK, mapNode);
+        MapResponse mapResponse = mapNode.transformToMapResponse();
+        return Response.valueOf(ResponseStatusEnum.OK, mapResponse);
     }
 
     @Override
@@ -126,11 +132,4 @@ public class MindMapServiceImpl implements MindMapService {
         return Response.valueOf(ResponseStatusEnum.OK, searchResult);
     }
 
-    private Boolean checkLoginStatus(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            return false;
-        }
-        return true;
-    }
 }
